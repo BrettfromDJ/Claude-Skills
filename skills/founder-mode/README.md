@@ -41,6 +41,7 @@ Same work. A fraction of the cognitive load.
 - **Explains coding work in plain English** — no jargon unless it genuinely helps.
 - **Leads with what changed and why it matters** — from your perspective, not the code's.
 - **Skips the routine narration** — no more play-by-play of file reads, refactors, or installs.
+- **Stays quiet while it works** — a brief heads-up at real checkpoints, not a running commentary between every step.
 - **Makes reasonable technical calls on its own** — so you're not rubber-stamping every decision.
 - **Interrupts you only when it counts** — when a choice affects the product, design, cost, security, or long-term direction.
 - **Handles failures cleanly** — what happened, whether it's fixed, and what you need to do next.
