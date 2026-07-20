@@ -4,7 +4,7 @@
 
 Founder Mode is for the person building the product, not maintaining the codebase. It changes *how Claude communicates*, not what it's capable of. Claude still writes the same code, runs the same tools, and solves the same problems. It just stops narrating the parts you don't care about and starts leading with the part you do: what changed, and why it matters.
 
-> Skill id: `plain-language` · Part of [Claude Skills](../../README.md)
+> Skill id: `founder-mode` · Part of [Claude Skills](../../README.md)
 
 ---
 
@@ -57,8 +57,7 @@ Available in every project on your machine.
 
 ```bash
 git clone https://github.com/BrettfromDJ/claude-skills.git
-mkdir -p ~/.claude/skills/plain-language
-cp claude-skills/skills/founder-mode/SKILL.md ~/.claude/skills/plain-language/
+cp -r claude-skills/skills/founder-mode ~/.claude/skills/
 ```
 
 ### Option 2 — Per project
@@ -67,13 +66,11 @@ Scoped to a single repository and shareable with your team via version control.
 
 ```bash
 git clone https://github.com/BrettfromDJ/claude-skills.git
-mkdir -p .claude/skills/plain-language
-cp claude-skills/skills/founder-mode/SKILL.md .claude/skills/plain-language/
+mkdir -p .claude/skills
+cp -r claude-skills/skills/founder-mode .claude/skills/
 ```
 
 That's it. The next time Claude Code does anything code-related, Founder Mode is on.
-
-> **Note on naming.** The skill installs as `plain-language` — that's its internal id and the folder name Claude Code expects. "Founder Mode" is simply its name in this collection.
 
 ---
 
@@ -84,8 +81,8 @@ Ask Claude Code to make a small change, then watch how it reports back. You'll k
 You can also confirm the file is in place:
 
 ```bash
-cat ~/.claude/skills/plain-language/SKILL.md   # personal install
-cat .claude/skills/plain-language/SKILL.md     # per-project install
+cat ~/.claude/skills/founder-mode/SKILL.md   # personal install
+cat .claude/skills/founder-mode/SKILL.md     # per-project install
 ```
 
 ---
@@ -107,8 +104,8 @@ After editing, restart your Claude Code session so the change is picked up.
 Delete the folder:
 
 ```bash
-rm -rf ~/.claude/skills/plain-language   # personal
-rm -rf .claude/skills/plain-language     # per-project
+rm -rf ~/.claude/skills/founder-mode   # personal
+rm -rf .claude/skills/founder-mode     # per-project
 ```
 
 ---

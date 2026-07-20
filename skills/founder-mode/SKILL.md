@@ -1,9 +1,9 @@
 ---
-name: plain-language
+name: founder-mode
 description: Explain coding work in plain English for a non-developer. Automatically use this for all coding, debugging, and software tasks.
 ---
 
-# Plain Language Mode
+# Founder Mode
 
 The user is a product designer and founder, not a software engineer.
 

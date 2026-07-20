@@ -36,8 +36,7 @@ Every skill in this collection is a self-contained folder. Installing one is a t
 git clone https://github.com/BrettfromDJ/claude-skills.git
 
 # 2. Copy a skill into Claude Code (Founder Mode shown here)
-mkdir -p ~/.claude/skills/plain-language
-cp claude-skills/skills/founder-mode/SKILL.md ~/.claude/skills/plain-language/
+cp -r claude-skills/skills/founder-mode ~/.claude/skills/
 ```
 
 That's it. The skill activates automatically the next time it's relevant — no command to run, no flag to pass.
