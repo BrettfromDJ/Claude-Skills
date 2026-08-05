@@ -1,0 +1,345 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Flint Grand Prix — A8UP</title>
+<style>
+  :root{
+    --pink:#F5DEE1;
+    --pink-deep:#EFD2D6;
+    --ink:#111013;
+    --red:#E3262A;
+    --hair:rgba(17,16,19,.85);
+    --hair-soft:rgba(17,16,19,.25);
+    --flint-yellow:#F2F022;
+    --mono:"SF Mono", ui-monospace, "Cascadia Mono", "Roboto Mono", Menlo, monospace;
+    --grot:"Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+  body{
+    background:var(--pink);
+    color:var(--ink);
+    font-family:var(--grot);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.35;
+  }
+  a{color:inherit;text-decoration:none}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+
+  .micro{
+    font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+  }
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+  /* ---------- header ---------- */
+  header{
+    display:grid;
+    grid-template-columns:1fr auto;
+    border-bottom:1px solid var(--hair);
+  }
+  .masthead{
+    display:flex;align-items:center;gap:40px;
+    padding:26px 40px 22px;
+  }
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:22px;letter-spacing:-.02em}
+  .logo svg{display:block}
+  nav{display:flex;gap:32px}
+  nav a{position:relative;padding-bottom:2px}
+  nav a:hover{box-shadow:0 1px 0 var(--ink)}
+  .burger{margin-left:24px;display:inline-flex;flex-direction:column;gap:4px;width:34px}
+  .burger span{height:1.5px;background:var(--ink)}
+  .day-cell{
+    border-left:1px solid var(--hair);
+    display:flex;flex-direction:column;justify-content:center;align-items:flex-end;
+    padding:0 40px;min-width:300px;gap:8px;
+  }
+  .day-cell i{font-style:italic;font-weight:600;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+  .day-track{width:130px;height:2px;background:var(--hair-soft);position:relative}
+  .day-track::after{content:"";position:absolute;left:0;top:0;height:100%;width:66%;background:var(--red)}
+
+  /* ---------- info grid ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:minmax(300px,420px) minmax(220px,320px) 1fr;
+    gap:0 40px;
+    padding:26px 40px 10px;
+  }
+  .sched{display:grid;grid-template-columns:auto auto 1fr;gap:7px 18px;align-self:start;font-size:11px}
+  .sched .num{color:rgba(17,16,19,.55)}
+  .sched .now,.sched .now ~ *{}
+  .sched .is-now{color:var(--red);font-weight:600}
+  .pos{align-self:start;display:grid;grid-template-columns:auto auto 1fr;gap:7px 18px;font-size:11px}
+  .pos .lbl{color:rgba(17,16,19,.55)}
+
+  .head-block{text-align:right;justify-self:end;max-width:760px}
+  .head-block .eyebrow{display:block;margin-bottom:10px;color:rgba(17,16,19,.6)}
+  h1{
+    font-size:clamp(60px,8.4vw,136px);
+    line-height:.92;font-weight:600;letter-spacing:-.025em;
+    text-wrap:balance;text-transform:uppercase;
+  }
+  .head-two{
+    margin-top:20px;font-size:clamp(17px,1.7vw,26px);
+    letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+  }
+  .head-sub{
+    margin-top:14px;font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;
+  }
+  .head-note{margin-top:8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(17,16,19,.65)}
+  .head-note b{color:var(--red);font-weight:600}
+
+  /* ---------- utility bar ---------- */
+  .util{
+    display:flex;align-items:center;gap:36px;
+    padding:22px 40px 26px;
+  }
+  .arrows{display:flex;gap:10px}
+  .arrows button{
+    width:26px;height:26px;border-radius:50%;border:1px solid var(--ink);background:none;
+    font-size:11px;line-height:1;cursor:pointer;color:var(--ink);
+  }
+  .arrows button:hover{background:var(--ink);color:var(--pink)}
+  .util .link:hover{box-shadow:0 1px 0 var(--ink)}
+  .util .spacer{flex:1}
+  .ttb{color:var(--red);font-size:13px;letter-spacing:.28em;font-weight:500}
+  .pill{
+    border:1px solid var(--ink);border-radius:999px;padding:10px 22px;background:none;cursor:pointer;
+    font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--ink);
+    transition:background .15s,color .15s;
+  }
+  .pill:hover{background:var(--ink);color:var(--pink)}
+
+  /* ---------- hero band ---------- */
+  .band{
+    position:relative;overflow:hidden;
+    height:min(78vh,720px);
+    border-top:1px solid var(--hair);
+    background:
+      radial-gradient(90% 70% at 72% 32%, rgba(186,214,208,.85) 0%, rgba(96,134,130,.8) 30%, rgba(38,64,68,.95) 58%, #0c161a 100%),
+      linear-gradient(160deg,#24403f 0%,#0f1c20 60%,#0a1215 100%);
+  }
+  .band::before{ /* visor light streak */
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(115deg, transparent 34%, rgba(210,240,235,.16) 45%, rgba(210,240,235,.05) 52%, transparent 60%),
+      radial-gradient(60% 45% at 30% 68%, rgba(227,38,42,.28) 0%, transparent 70%),
+      radial-gradient(45% 40% at 62% 40%, rgba(255,255,255,.14) 0%, transparent 70%);
+  }
+  .band::after{ /* grain */
+    content:"";position:absolute;inset:0;opacity:.5;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='0.35'/></svg>");
+  }
+  .band .numeral{
+    position:absolute;left:4vw;bottom:-2vw;z-index:2;
+    color:#fff;font-weight:700;letter-spacing:-.04em;line-height:1;
+    font-size:clamp(160px,24vw,380px);
+    text-shadow:0 0 60px rgba(0,0,0,.25);
+  }
+  .band .ring{
+    position:absolute;right:8vw;top:50%;transform:translateY(-50%);z-index:2;
+    width:clamp(220px,26vw,420px);aspect-ratio:1;border:1.5px solid rgba(255,255,255,.85);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-weight:300;font-size:clamp(48px,6vw,96px);letter-spacing:.02em;
+  }
+  .band .caption{
+    position:absolute;right:40px;bottom:28px;z-index:2;color:rgba(255,255,255,.75);
+  }
+
+  /* ---------- leaderboard ---------- */
+  .board{padding:0 40px 30px}
+  .board-head{
+    display:flex;align-items:baseline;gap:28px;
+    padding:26px 0 18px;border-bottom:1px solid var(--hair);
+  }
+  .board-head h2{font-size:12px;letter-spacing:.24em;text-transform:uppercase;font-weight:700}
+  .live{display:inline-flex;align-items:center;gap:7px;color:var(--red)}
+  .live-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:pulse 1.6s ease-out infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(227,38,42,.45)}100%{box-shadow:0 0 0 9px rgba(227,38,42,0)}}
+  .board-head .where{color:rgba(17,16,19,.6)}
+  .board-head .tag{margin-left:auto;color:rgba(17,16,19,.6);font-style:italic;font-size:11px;letter-spacing:.04em;text-transform:none}
+
+  .podium{display:grid;grid-template-columns:1fr 1fr 1fr}
+  .podium > div{padding:30px 28px 34px;border-right:1px solid var(--hair-soft)}
+  .podium > div:last-child{border-right:0}
+  .podium .p-pos{display:flex;justify-content:space-between;margin-bottom:26px;color:rgba(17,16,19,.55)}
+  .podium .p-name{font-size:clamp(20px,2.1vw,30px);font-weight:600;letter-spacing:-.01em;text-transform:uppercase}
+  .podium .p-time{margin-top:8px;font-size:clamp(18px,1.9vw,26px);color:rgba(17,16,19,.75)}
+  .podium .first .p-pos{color:var(--red)}
+  .podium .first .p-name{font-weight:700;font-size:clamp(24px,2.5vw,36px)}
+  .podium .first .p-time{color:var(--red);font-size:clamp(20px,2.2vw,30px)}
+
+  .ttb-row{
+    display:flex;justify-content:space-between;align-items:center;
+    border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+    padding:16px 0;color:var(--red);
+  }
+  .ttb-row .t{font-size:clamp(22px,2.6vw,34px);letter-spacing:.06em;font-weight:500}
+
+  .rows .row{
+    display:grid;grid-template-columns:60px 1fr auto;align-items:baseline;
+    padding:16px 0;border-bottom:1px solid var(--hair-soft);font-size:14px;
+  }
+  .rows .row .r-num{color:rgba(17,16,19,.5)}
+  .rows .row .r-name{text-transform:uppercase;letter-spacing:.06em;font-weight:500}
+  .rows .row .r-time{font-size:15px}
+  .rows .you{color:rgba(17,16,19,.45);font-style:italic}
+  .board-foot{display:flex;justify-content:space-between;padding:14px 0 0;color:rgba(17,16,19,.55)}
+
+  /* ---------- footer ---------- */
+  .checker{
+    height:16px;border-top:1px solid var(--hair);
+    background:repeating-conic-gradient(var(--ink) 0% 25%, transparent 0% 50%);
+    background-size:16px 16px;
+  }
+  footer{
+    display:flex;align-items:center;gap:24px;
+    padding:20px 40px 26px;border-top:1px solid var(--hair);
+  }
+  .builtwith{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--flint-yellow);padding:8px 14px;
+    font-weight:700;font-size:13px;letter-spacing:-.01em;
+  }
+  footer .spacer{flex:1}
+  footer .f-note{color:rgba(17,16,19,.55)}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:960px){
+    .grid{grid-template-columns:1fr;gap:26px}
+    .head-block{text-align:left;justify-self:start}
+    .day-cell{min-width:0;padding:0 20px}
+    .masthead{padding:20px;gap:20px}
+    nav{display:none}
+    .grid,.util,.board,footer{padding-left:20px;padding-right:20px}
+    .util{flex-wrap:wrap;gap:16px}
+    .podium{grid-template-columns:1fr}
+    .podium > div{border-right:0;border-bottom:1px solid var(--hair-soft)}
+    .band .caption{right:20px}
+  }
+</style>
+
+<header>
+  <div class="masthead">
+    <a class="logo" href="#" aria-label="Flint home">
+      <svg width="26" height="24" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 3.5 24 1l-2.2 5L2 8.5V3.5Z" fill="var(--ink)"/>
+        <path d="M2 10.5 20.6 8l-2.2 5L2 15.5v-5Z" fill="var(--ink)"/>
+        <path d="M2 17.5 17.2 15l-2.2 5L2 22v-4.5Z" fill="var(--ink)"/>
+      </svg>
+      Flint
+    </a>
+    <nav class="micro" aria-label="Main">
+      <a href="#board">Leaderboard</a>
+      <a href="#">Prizes</a>
+      <a href="#">Stickers</a>
+    </nav>
+    <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
+  </div>
+  <div class="day-cell">
+    <i>Day 2 of 3 — A8UP</i>
+    <span class="day-track" aria-hidden="true"></span>
+  </div>
+</header>
+
+<section class="grid">
+  <div class="sched mono" aria-label="Schedule">
+    <span class="num">1</span><span>04/08</span><span>Sierra Nublada — Qualifying laps</span>
+    <span class="num is-now">2</span><span class="is-now">05/08</span><span class="is-now">Sierra Nublada — Open competition</span>
+    <span class="num">3</span><span>06/08</span><span>Sierra Nublada — Finals &amp; podium</span>
+  </div>
+  <div class="pos mono" aria-label="Current leader">
+    <span class="lbl">POS.</span><span>1</span><span>T. Winner — 0:30.040</span>
+    <span class="lbl"></span><span>2</span><span>L. Qswde — 1:22.010</span>
+    <span class="lbl"></span><span>3</span><span>W. Swdef — 1:33.040</span>
+  </div>
+  <div class="head-block">
+    <span class="eyebrow micro">The Flint Grand Prix</span>
+    <h1>Fastest lap wins.</h1>
+    <p class="head-two">Slow laps get stickers.</p>
+    <p class="head-sub">Stop by booth #### to get on the leaderboard</p>
+    <p class="head-note">Fresh board every morning · resets <b>9:00 AM PT</b></p>
+  </div>
+</section>
+
+<div class="util micro">
+  <span class="arrows" aria-hidden="true"><button type="button">←</button><button type="button">→</button></span>
+  <a class="link" href="#">2026 Season →</a>
+  <a class="link" href="#board">Full standings →</a>
+  <span class="spacer"></span>
+  <span class="ttb mono">TIME TO BEAT&nbsp;&nbsp;0 : 30 . 040</span>
+  <button class="pill" type="button">Booth # Coming Soon</button>
+</div>
+
+<section class="band" aria-label="Day 2 — Sierra Nublada">
+  <span class="numeral" aria-hidden="true">A8</span>
+  <span class="ring" aria-hidden="true">UP</span>
+  <span class="caption micro">Sierra Nublada · Day 2 · Live from the booth</span>
+</section>
+
+<section class="board" id="board">
+  <div class="board-head micro">
+    <h2>Live leaderboard</h2>
+    <span class="live"><span class="live-dot"></span>Live</span>
+    <span class="where">Day 2 · Sierra Nublada</span>
+    <span class="tag">Fresh board every morning, so a slow start's no excuse.</span>
+  </div>
+
+  <div class="podium">
+    <div>
+      <div class="p-pos micro"><span>Pos. 02</span><span>Silver</span></div>
+      <div class="p-name">L. Qswde</div>
+      <div class="p-time mono">1:22.010</div>
+    </div>
+    <div class="first">
+      <div class="p-pos micro"><span>Pos. 01</span><span>Fastest lap</span></div>
+      <div class="p-name">T. Winner</div>
+      <div class="p-time mono">0:30.040</div>
+    </div>
+    <div>
+      <div class="p-pos micro"><span>Pos. 03</span><span>Bronze</span></div>
+      <div class="p-name">W. Swdef</div>
+      <div class="p-time mono">1:33.040</div>
+    </div>
+  </div>
+
+  <div class="ttb-row">
+    <span class="micro">Time to beat</span>
+    <span class="t mono">0 : 30 . 040</span>
+  </div>
+
+  <div class="rows">
+    <div class="row">
+      <span class="r-num mono">04</span>
+      <span class="r-name">L. James</span>
+      <span class="r-time mono">2:10.100</span>
+    </div>
+    <div class="row you">
+      <span class="r-num mono">05</span>
+      <span class="r-name" style="font-style:italic;text-transform:none;letter-spacing:.02em">Your name here — stop by the booth</span>
+      <span class="r-time mono">—:—.———</span>
+    </div>
+  </div>
+
+  <div class="board-foot micro">
+    <span>Updated 25 hrs ago</span>
+    <span>Resets 9:00 AM PT</span>
+  </div>
+</section>
+
+<div class="checker" aria-hidden="true"></div>
+
+<footer>
+  <span class="builtwith">
+    <svg width="18" height="17" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+      <path d="M2 3.5 24 1l-2.2 5L2 8.5V3.5Z" fill="#111013"/>
+      <path d="M2 10.5 20.6 8l-2.2 5L2 15.5v-5Z" fill="#111013"/>
+      <path d="M2 17.5 17.2 15l-2.2 5L2 22v-4.5Z" fill="#111013"/>
+    </svg>
+    Built with Flint
+  </span>
+  <span class="spacer"></span>
+  <span class="f-note micro">The Flint Grand Prix · A8UP 2026 · Sierra Nublada</span>
+</footer>
