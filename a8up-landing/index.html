@@ -3,15 +3,17 @@
 <title>The Flint Grand Prix — A8UP</title>
 <style>
   :root{
-    --pink:#F5DEE1;
-    --pink-deep:#EFD2D6;
-    --ink:#111013;
-    --red:#E3262A;
-    --hair:rgba(17,16,19,.85);
-    --hair-soft:rgba(17,16,19,.25);
-    --flint-yellow:#F2F022;
+    --paper:#FFFFFF;
+    --panel:#F9F9F9;
+    --ink:#0E0E10;
+    --mut:#6E6E74;
+    --yellow:#F7F83B;
+    --hair:rgba(14,14,16,.14);
+    --hair-strong:rgba(14,14,16,.85);
     --mono:"SF Mono", ui-monospace, "Cascadia Mono", "Roboto Mono", Menlo, monospace;
     --grot:"Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+    --lift:0 1px 2px rgba(14,14,16,.04), 0 16px 40px rgba(14,14,16,.07);
+    --lift-big:0 2px 4px rgba(14,14,16,.05), 0 32px 80px rgba(14,14,16,.12);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -20,269 +22,267 @@
     *,*::before,*::after{animation:none!important;transition:none!important}
   }
   body{
-    background:var(--pink);
-    color:var(--ink);
-    font-family:var(--grot);
-    -webkit-font-smoothing:antialiased;
-    line-height:1.35;
+    background:var(--paper);color:var(--ink);
+    font-family:var(--grot);-webkit-font-smoothing:antialiased;line-height:1.4;
   }
   a{color:inherit;text-decoration:none}
-  a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 
-  .micro{
-    font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
-  }
+  .micro{font-size:10px;letter-spacing:.15em;text-transform:uppercase;font-weight:600}
   .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  mark{
+    background:var(--yellow);color:inherit;
+    padding:0 .06em;box-decoration-break:clone;-webkit-box-decoration-break:clone;
+  }
 
   /* ---------- header ---------- */
   header{
-    display:grid;
-    grid-template-columns:1fr auto;
+    display:grid;grid-template-columns:1fr auto;
     border-bottom:1px solid var(--hair);
+    position:sticky;top:0;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);z-index:50;
   }
-  .masthead{
-    display:flex;align-items:center;gap:40px;
-    padding:26px 40px 22px;
-  }
-  .logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:22px;letter-spacing:-.02em}
+  .masthead{display:flex;align-items:center;gap:40px;padding:18px 40px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:21px;letter-spacing:-.02em}
   .logo svg{display:block}
-  nav{display:flex;gap:32px}
-  nav a{position:relative;padding-bottom:2px}
-  nav a:hover{box-shadow:0 1px 0 var(--ink)}
-  .burger{margin-left:24px;display:inline-flex;flex-direction:column;gap:4px;width:34px}
-  .burger span{height:1.5px;background:var(--ink)}
+  nav{display:flex;gap:30px;color:var(--mut)}
+  nav a{padding-bottom:2px}
+  nav a:hover{color:var(--ink)}
+  .head-cta{margin-left:auto}
+  .btn{
+    display:inline-block;border-radius:999px;padding:11px 20px;cursor:pointer;
+    font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;
+    transition:transform .15s,background .15s,color .15s,border-color .15s,box-shadow .15s;
+  }
+  .btn-ink{background:var(--ink);color:#fff}
+  .btn-ink:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(14,14,16,.18)}
+  .btn-yellow{background:var(--yellow);color:var(--ink)}
+  .btn-yellow:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(247,248,59,.35)}
+  .btn-ghost-dark{border:1px solid rgba(255,255,255,.4);color:#fff}
+  .btn-ghost-dark:hover{border-color:#fff;background:rgba(255,255,255,.06)}
   .day-cell{
     border-left:1px solid var(--hair);
     display:flex;flex-direction:column;justify-content:center;align-items:flex-end;
-    padding:0 40px;min-width:300px;gap:8px;
+    padding:0 40px;min-width:280px;gap:7px;
   }
-  .day-cell i{font-style:italic;font-weight:600;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
-  .day-track{width:130px;height:2px;background:var(--hair-soft);position:relative}
-  .day-track::after{content:"";position:absolute;left:0;top:0;height:100%;width:66%;background:var(--red)}
+  .day-cell i{font-style:italic;font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  .day-track{width:120px;height:2px;background:var(--hair);position:relative}
+  .day-track::after{content:"";position:absolute;left:0;top:0;height:100%;width:66%;background:var(--ink)}
 
-  /* ---------- info grid ---------- */
+  /* ---------- hero ---------- */
   .grid{
-    display:grid;
-    grid-template-columns:minmax(300px,420px) minmax(220px,320px) 1fr;
-    gap:0 40px;
-    padding:26px 40px 10px;
+    display:grid;grid-template-columns:minmax(280px,400px) minmax(200px,300px) 1fr;
+    gap:0 40px;padding:44px 40px 12px;
   }
-  .sched{display:grid;grid-template-columns:auto auto 1fr;gap:7px 18px;align-self:start;font-size:11px}
-  .sched .num{color:rgba(17,16,19,.55)}
-  .sched .now,.sched .now ~ *{}
-  .sched .is-now{color:var(--red);font-weight:600}
-  .pos{align-self:start;display:grid;grid-template-columns:auto auto 1fr;gap:7px 18px;font-size:11px}
-  .pos .lbl{color:rgba(17,16,19,.55)}
-
-  .head-block{text-align:right;justify-self:end;max-width:760px}
-  .head-block .eyebrow{display:block;margin-bottom:10px;color:rgba(17,16,19,.6)}
+  .sched,.pos{display:grid;grid-template-columns:auto auto 1fr;gap:8px 16px;align-self:start;font-size:11px;color:var(--mut)}
+  .sched .is-now{color:var(--ink);font-weight:700}
+  .head-block{text-align:right;justify-self:end;max-width:820px}
+  .head-block .eyebrow{display:block;margin-bottom:14px;color:var(--mut)}
   h1{
-    font-size:clamp(60px,8.4vw,136px);
-    line-height:.92;font-weight:600;letter-spacing:-.025em;
-    text-wrap:balance;text-transform:uppercase;
+    font-size:clamp(58px,8.2vw,132px);
+    line-height:.94;font-weight:700;letter-spacing:-.03em;
+    text-wrap:balance;
   }
-  .head-two{
-    margin-top:20px;font-size:clamp(17px,1.7vw,26px);
-    letter-spacing:.1em;text-transform:uppercase;font-weight:700;
-  }
-  .head-sub{
-    margin-top:14px;font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;
-  }
-  .head-note{margin-top:8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(17,16,19,.65)}
-  .head-note b{color:var(--red);font-weight:600}
+  .head-two{margin-top:22px;font-size:clamp(16px,1.6vw,24px);letter-spacing:.02em;font-weight:600;color:var(--ink)}
+  .head-sub{margin-top:12px;font-size:13px;color:var(--mut)}
 
-  /* ---------- utility bar ---------- */
   .util{
-    display:flex;align-items:center;gap:36px;
-    padding:22px 40px 26px;
+    display:flex;align-items:center;gap:32px;
+    padding:26px 40px 34px;
   }
-  .arrows{display:flex;gap:10px}
-  .arrows button{
-    width:26px;height:26px;border-radius:50%;border:1px solid var(--ink);background:none;
-    font-size:11px;line-height:1;cursor:pointer;color:var(--ink);
-  }
-  .arrows button:hover{background:var(--ink);color:var(--pink)}
-  .util .link:hover{box-shadow:0 1px 0 var(--ink)}
+  .util .link{color:var(--mut)}
+  .util .link:hover{color:var(--ink)}
   .util .spacer{flex:1}
-  .ttb{color:var(--red);font-size:13px;letter-spacing:.28em;font-weight:500}
-  .pill{
-    border:1px solid var(--ink);border-radius:999px;padding:10px 22px;background:none;cursor:pointer;
-    font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--ink);
-    transition:background .15s,color .15s;
-  }
-  .pill:hover{background:var(--ink);color:var(--pink)}
+  .ttb{font-size:12px;letter-spacing:.22em;font-weight:600}
+  .ttb b{background:var(--yellow);padding:2px 8px;font-weight:600;margin-left:6px}
 
-  /* ---------- hero band ---------- */
+  /* ---------- texture band ---------- */
   .band{
     position:relative;overflow:hidden;
-    height:min(78vh,720px);
-    border-top:1px solid var(--hair);
+    height:min(74vh,680px);
     background:
-      radial-gradient(90% 70% at 72% 32%, rgba(186,214,208,.85) 0%, rgba(96,134,130,.8) 30%, rgba(38,64,68,.95) 58%, #0c161a 100%),
-      linear-gradient(160deg,#24403f 0%,#0f1c20 60%,#0a1215 100%);
+      radial-gradient(85% 65% at 70% 30%, rgba(210,214,222,.5) 0%, rgba(112,118,130,.55) 30%, rgba(38,40,48,.9) 60%, #0b0c10 100%),
+      linear-gradient(160deg,#26282e 0%,#101116 60%,#0b0c10 100%);
   }
-  .band::before{ /* visor light streak */
+  .band::before{
     content:"";position:absolute;inset:0;
     background:
-      linear-gradient(115deg, transparent 34%, rgba(210,240,235,.16) 45%, rgba(210,240,235,.05) 52%, transparent 60%),
-      radial-gradient(60% 45% at 30% 68%, rgba(227,38,42,.28) 0%, transparent 70%),
-      radial-gradient(45% 40% at 62% 40%, rgba(255,255,255,.14) 0%, transparent 70%);
+      linear-gradient(115deg, transparent 34%, rgba(235,240,245,.13) 45%, rgba(235,240,245,.04) 52%, transparent 60%),
+      radial-gradient(50% 42% at 62% 40%, rgba(255,255,255,.1) 0%, transparent 70%);
   }
-  .band::after{ /* grain */
-    content:"";position:absolute;inset:0;opacity:.5;mix-blend-mode:overlay;
+  .band::after{
+    content:"";position:absolute;inset:0;opacity:.45;mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='0.35'/></svg>");
   }
   .band .numeral{
     position:absolute;left:4vw;bottom:-2vw;z-index:2;
     color:#fff;font-weight:700;letter-spacing:-.04em;line-height:1;
-    font-size:clamp(160px,24vw,380px);
+    font-size:clamp(150px,22vw,350px);
     text-shadow:0 0 60px rgba(0,0,0,.25);
+    will-change:transform;
   }
   .band .ring{
     position:absolute;right:8vw;top:50%;transform:translateY(-50%);z-index:2;
-    width:clamp(220px,26vw,420px);aspect-ratio:1;border:1.5px solid rgba(255,255,255,.85);border-radius:50%;
+    width:clamp(200px,24vw,390px);aspect-ratio:1;border:1.5px solid var(--yellow);border-radius:50%;
     display:flex;align-items:center;justify-content:center;
-    color:#fff;font-weight:300;font-size:clamp(48px,6vw,96px);letter-spacing:.02em;
+    color:var(--yellow);font-weight:300;font-size:clamp(44px,5.5vw,88px);letter-spacing:.02em;
+    will-change:transform;
   }
-  .band .caption{
-    position:absolute;right:40px;bottom:28px;z-index:2;color:rgba(255,255,255,.75);
+  .band .caption{position:absolute;left:40px;top:26px;z-index:2;color:rgba(255,255,255,.6)}
+
+  /* ---------- checker transition ---------- */
+  .checker{
+    height:96px;background:var(--yellow);position:relative;
+  }
+  .checker::before{
+    content:"";position:absolute;inset:0;
+    background:repeating-conic-gradient(var(--ink) 0% 25%, transparent 0% 50%);
+    background-size:96px 96px;
   }
 
   /* ---------- leaderboard ---------- */
-  .board{padding:0 40px 30px}
-  .board-head{
-    display:flex;align-items:baseline;gap:28px;
-    padding:26px 0 18px;border-bottom:1px solid var(--hair);
+  .board-wrap{background:var(--panel);padding:0 40px 90px;border-bottom:1px solid var(--hair)}
+  .board-head{max-width:680px;margin:0 auto;text-align:center;padding:74px 0 40px}
+  .board-head h2{font-size:clamp(30px,3.2vw,44px);font-weight:700;letter-spacing:-.02em}
+  .board-head p{margin-top:12px;color:var(--mut);font-size:15px}
+  .board-card{
+    max-width:980px;margin:0 auto;
+    background:var(--paper);border:1px solid var(--hair);border-radius:18px;
+    box-shadow:var(--lift-big);overflow:hidden;
+    position:relative;margin-top:-48px;
   }
-  .board-head h2{font-size:12px;letter-spacing:.24em;text-transform:uppercase;font-weight:700}
-  .live{display:inline-flex;align-items:center;gap:7px;color:var(--red)}
-  .live-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:pulse 1.6s ease-out infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(227,38,42,.45)}100%{box-shadow:0 0 0 9px rgba(227,38,42,0)}}
-  .board-head .where{color:rgba(17,16,19,.6)}
-  .board-head .tag{margin-left:auto;color:rgba(17,16,19,.6);font-style:italic;font-size:11px;letter-spacing:.04em;text-transform:none}
-
+  .board-card .chrome{
+    display:flex;align-items:center;gap:22px;
+    background:var(--ink);color:rgba(255,255,255,.75);
+    padding:14px 26px;
+  }
+  .chrome .live{display:inline-flex;align-items:center;gap:7px;color:#fff}
+  .live-dot{width:7px;height:7px;border-radius:50%;background:#3ddc6a;animation:pulse 1.6s ease-out infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(61,220,106,.5)}100%{box-shadow:0 0 0 8px rgba(61,220,106,0)}}
+  .chrome .where{margin-left:auto}
+  .embed{padding:10px 26px 6px}
   .podium{display:grid;grid-template-columns:1fr 1fr 1fr}
-  .podium > div{padding:30px 28px 34px;border-right:1px solid var(--hair-soft)}
+  .podium > div{padding:26px 20px 28px;border-right:1px solid var(--hair)}
   .podium > div:last-child{border-right:0}
-  .podium .p-pos{display:flex;justify-content:space-between;margin-bottom:26px;color:rgba(17,16,19,.55)}
-  .podium .p-name{font-size:clamp(20px,2.1vw,30px);font-weight:600;letter-spacing:-.01em;text-transform:uppercase}
-  .podium .p-time{margin-top:8px;font-size:clamp(18px,1.9vw,26px);color:rgba(17,16,19,.75)}
-  .podium .first .p-pos{color:var(--red)}
-  .podium .first .p-name{font-weight:700;font-size:clamp(24px,2.5vw,36px)}
-  .podium .first .p-time{color:var(--red);font-size:clamp(20px,2.2vw,30px)}
-
+  .podium .p-pos{display:flex;justify-content:space-between;margin-bottom:20px;color:var(--mut)}
+  .podium .p-name{font-size:clamp(18px,1.9vw,26px);font-weight:700;letter-spacing:-.01em}
+  .podium .p-time{margin-top:6px;font-size:clamp(16px,1.7vw,22px);color:var(--mut)}
+  .podium .first .p-time b{background:var(--yellow);font-weight:500;padding:1px 7px}
   .ttb-row{
     display:flex;justify-content:space-between;align-items:center;
     border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
-    padding:16px 0;color:var(--red);
+    padding:14px 0;
   }
-  .ttb-row .t{font-size:clamp(22px,2.6vw,34px);letter-spacing:.06em;font-weight:500}
-
+  .ttb-row .t{font-size:clamp(19px,2.1vw,27px);letter-spacing:.05em;font-weight:500}
   .rows .row{
-    display:grid;grid-template-columns:60px 1fr auto;align-items:baseline;
-    padding:16px 0;border-bottom:1px solid var(--hair-soft);font-size:14px;
+    display:grid;grid-template-columns:52px 1fr auto;align-items:baseline;
+    padding:14px 0;border-bottom:1px solid var(--hair);font-size:14px;
   }
-  .rows .row .r-num{color:rgba(17,16,19,.5)}
-  .rows .row .r-name{text-transform:uppercase;letter-spacing:.06em;font-weight:500}
-  .rows .row .r-time{font-size:15px}
-  .rows .you{color:rgba(17,16,19,.45);font-style:italic}
-  .board-foot{display:flex;justify-content:space-between;padding:14px 0 0;color:rgba(17,16,19,.55)}
+  .rows .row:last-child{border-bottom:0}
+  .rows .row .r-num{color:var(--mut)}
+  .rows .row .r-name{font-weight:600;letter-spacing:.01em}
+  .rows .you{color:var(--mut);font-style:italic;font-weight:400}
+  .board-foot{
+    display:flex;justify-content:space-between;
+    padding:12px 26px;border-top:1px solid var(--hair);color:var(--mut);background:var(--panel);
+  }
+
+  /* ---------- this is a flint page ---------- */
+  .meta-sec{
+    display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:60px;
+    padding:100px 40px;max-width:1240px;margin:0 auto;align-items:start;
+  }
+  .meta-sec .lbl{color:var(--mut);display:flex;align-items:center;gap:12px}
+  .meta-sec .lbl::before{content:"";width:34px;height:1px;background:var(--ink)}
+  .meta-sec h2{font-size:clamp(30px,3.4vw,48px);font-weight:700;letter-spacing:-.02em;text-wrap:balance}
+  .meta-sec .body p{font-size:17px;line-height:1.65;color:var(--mut);max-width:56ch}
+  .meta-sec .body p + p{margin-top:18px}
+  .meta-sec .body b{color:var(--ink);font-weight:600}
+
+  /* ---------- what is flint ---------- */
+  .sectors{background:var(--panel);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+  .sectors-inner{max-width:1240px;margin:0 auto;padding:90px 40px 100px}
+  .sectors-head{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;margin-bottom:44px;flex-wrap:wrap}
+  .sectors-head h2{font-size:clamp(30px,3.4vw,48px);font-weight:700;letter-spacing:-.02em;max-width:22ch;text-wrap:balance}
+  .sectors-head p{color:var(--mut);font-size:15px;max-width:38ch}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .card{
+    background:var(--paper);border:1px solid var(--hair);border-radius:16px;
+    padding:28px 26px 30px;box-shadow:var(--lift);
+    transition:transform .2s,box-shadow .2s;
+  }
+  .card:hover{transform:translateY(-3px);box-shadow:var(--lift-big)}
+  .card .s{color:var(--mut);display:flex;justify-content:space-between;margin-bottom:38px}
+  .card .s b{color:var(--ink);font-weight:700}
+  .card h3{font-size:20px;font-weight:700;letter-spacing:-.01em}
+  .card p{margin-top:10px;color:var(--mut);font-size:14px;line-height:1.6}
 
   /* ---------- cta ---------- */
-  .cta{
-    background:var(--ink);color:var(--pink);
-    border-top:1px solid var(--hair);overflow:hidden;
-  }
-  .ticker{
-    border-bottom:1px solid rgba(245,222,225,.22);
-    padding:11px 0;white-space:nowrap;overflow:hidden;
-  }
-  .ticker-track{display:inline-block;animation:tick 26s linear infinite;will-change:transform}
-  .ticker-track > span{display:inline-block;color:rgba(245,222,225,.65)}
-  @keyframes tick{to{transform:translateX(-50%)}}
-  .cta-inner{
-    padding:64px 40px 58px;
-    display:flex;flex-direction:column;gap:40px;
-  }
-  .cta-top{
-    display:flex;justify-content:space-between;align-items:center;
-    color:rgba(245,222,225,.55);
-  }
+  .cta{background:var(--ink);color:#fff;overflow:hidden}
+  .cta-inner{max-width:1240px;margin:0 auto;padding:96px 40px 88px;display:flex;flex-direction:column;gap:44px}
+  .cta-top{display:flex;justify-content:space-between;align-items:center;color:rgba(255,255,255,.5)}
   .lights{display:flex;gap:11px}
   .light{
-    width:13px;height:13px;border-radius:50%;
-    border:1px solid rgba(245,222,225,.35);
-    animation:lightup 6s infinite;
-    animation-delay:calc(var(--i) * .45s);
+    width:12px;height:12px;border-radius:50%;
+    border:1px solid rgba(255,255,255,.3);
+    animation:lightup 6s infinite;animation-delay:calc(var(--i) * .45s);
   }
   @keyframes lightup{
     0%,4%{background:transparent;box-shadow:none}
-    8%,52%{background:var(--red);box-shadow:0 0 12px rgba(227,38,42,.7)}
+    8%,52%{background:var(--yellow);box-shadow:0 0 12px rgba(247,248,59,.6)}
     58%,100%{background:transparent;box-shadow:none}
   }
-  @media (prefers-reduced-motion: reduce){
-    .light{background:var(--red)}
-  }
+  @media (prefers-reduced-motion: reduce){.light{background:var(--yellow)}}
   .cta h2{
-    font-size:clamp(42px,6.4vw,102px);
-    line-height:.95;font-weight:600;letter-spacing:-.02em;
-    text-transform:uppercase;text-wrap:balance;max-width:1240px;
+    font-size:clamp(40px,5.6vw,84px);
+    line-height:1.02;font-weight:700;letter-spacing:-.025em;
+    text-wrap:balance;max-width:1100px;
   }
-  .cta h2 em{font-style:normal;color:transparent;-webkit-text-stroke:1.5px var(--pink)}
-  @supports not (-webkit-text-stroke:1px black){.cta h2 em{color:var(--pink)}}
-  .cta-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-  .btn{
-    display:inline-block;border-radius:999px;padding:16px 30px;
-    font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
-    transition:background .15s,color .15s,border-color .15s;
-  }
-  .btn-solid{background:var(--pink);color:var(--ink)}
-  .btn-solid:hover{background:var(--red);color:#fff}
-  .btn-ghost{border:1px solid rgba(245,222,225,.5);color:var(--pink)}
-  .btn-ghost:hover{border-color:var(--pink);background:rgba(245,222,225,.08)}
+  .cta h2 mark{background:var(--yellow);padding:0 .1em}
+  .cta .sub{color:rgba(255,255,255,.55);font-size:16px;max-width:52ch;margin-top:-18px}
+  .cta-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .cta-actions .btn{padding:16px 28px;font-size:11px}
   .cta-actions .spacer{flex:1}
-  .cta-actions .site{color:var(--red);font-size:12px;letter-spacing:.24em}
-  .cta-actions .site:hover{box-shadow:0 1px 0 var(--red)}
+  .cta-actions .site{color:rgba(255,255,255,.55);font-size:12px;letter-spacing:.22em}
+  .cta-actions .site:hover{color:#fff}
 
   /* ---------- footer ---------- */
-  .checker{
-    height:16px;border-top:1px solid var(--hair);
-    background:repeating-conic-gradient(var(--ink) 0% 25%, transparent 0% 50%);
-    background-size:16px 16px;
-  }
-  footer{
-    display:flex;align-items:center;gap:24px;
-    padding:20px 40px 26px;border-top:1px solid var(--hair);
-  }
+  footer{display:flex;align-items:center;gap:24px;padding:22px 40px;background:var(--paper)}
   .builtwith{
     display:inline-flex;align-items:center;gap:8px;
-    background:var(--flint-yellow);padding:8px 14px;
+    background:var(--yellow);padding:8px 14px;border-radius:6px;
     font-weight:700;font-size:13px;letter-spacing:-.01em;
   }
   footer .spacer{flex:1}
-  footer .f-note{color:rgba(17,16,19,.55)}
+  footer .f-note{color:var(--mut)}
 
   /* ---------- responsive ---------- */
   @media (max-width:960px){
-    .cta-inner{padding:44px 20px 40px;gap:28px}
-    .cta-actions .spacer{display:none}
-    .grid{grid-template-columns:1fr;gap:26px}
-    .head-block{text-align:left;justify-self:start}
+    .masthead{padding:14px 20px;gap:20px}
+    nav,.head-cta{display:none}
     .day-cell{min-width:0;padding:0 20px}
-    .masthead{padding:20px;gap:20px}
-    nav{display:none}
-    .grid,.util,.board,footer{padding-left:20px;padding-right:20px}
-    .util{flex-wrap:wrap;gap:16px}
+    .grid{grid-template-columns:1fr;gap:26px;padding:32px 20px 8px}
+    .head-block{text-align:left;justify-self:start}
+    .util{flex-wrap:wrap;gap:14px;padding:20px}
+    .board-wrap{padding:0 20px 60px}
+    .board-card{margin-top:-32px}
     .podium{grid-template-columns:1fr}
-    .podium > div{border-right:0;border-bottom:1px solid var(--hair-soft)}
-    .band .caption{right:20px}
+    .podium > div{border-right:0;border-bottom:1px solid var(--hair)}
+    .meta-sec{grid-template-columns:1fr;gap:24px;padding:60px 20px}
+    .sectors-inner{padding:60px 20px}
+    .cards{grid-template-columns:1fr}
+    .cta-inner{padding:64px 20px;gap:32px}
+    .cta-actions .spacer{display:none}
+    footer{padding:18px 20px;flex-wrap:wrap}
+    .checker{height:64px}
+    .checker::before{background-size:64px 64px}
+    .band .caption{left:20px}
   }
 </style>
 
 <header>
   <div class="masthead">
     <a class="logo" href="#" aria-label="Flint home">
-      <svg width="26" height="24" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+      <svg width="24" height="22" viewBox="0 0 26 24" fill="none" aria-hidden="true">
         <path d="M2 3.5 24 1l-2.2 5L2 8.5V3.5Z" fill="var(--ink)"/>
         <path d="M2 10.5 20.6 8l-2.2 5L2 15.5v-5Z" fill="var(--ink)"/>
         <path d="M2 17.5 17.2 15l-2.2 5L2 22v-4.5Z" fill="var(--ink)"/>
@@ -291,10 +291,10 @@
     </a>
     <nav class="micro" aria-label="Main">
       <a href="#board">Leaderboard</a>
-      <a href="#">Prizes</a>
-      <a href="#">Stickers</a>
+      <a href="#flint">What is Flint</a>
+      <a href="#visit">Find us</a>
     </nav>
-    <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
+    <span class="head-cta"><a class="btn btn-ink" href="#visit">See Flint build one</a></span>
   </div>
   <div class="day-cell">
     <i>Day 2 of 3 — A8UP</i>
@@ -304,31 +304,28 @@
 
 <section class="grid">
   <div class="sched mono" aria-label="Schedule">
-    <span class="num">1</span><span>04/08</span><span>Sierra Nublada — Qualifying laps</span>
-    <span class="num is-now">2</span><span class="is-now">05/08</span><span class="is-now">Sierra Nublada — Open competition</span>
-    <span class="num">3</span><span>06/08</span><span>Sierra Nublada — Finals &amp; podium</span>
+    <span>1</span><span>04/08</span><span>Sierra Nublada — Qualifying</span>
+    <span class="is-now">2</span><span class="is-now">05/08</span><span class="is-now">Sierra Nublada — Open competition</span>
+    <span>3</span><span>06/08</span><span>Sierra Nublada — Finals &amp; podium</span>
   </div>
-  <div class="pos mono" aria-label="Current leader">
-    <span class="lbl">POS.</span><span>1</span><span>T. Winner — 0:30.040</span>
-    <span class="lbl"></span><span>2</span><span>L. Qswde — 1:22.010</span>
-    <span class="lbl"></span><span>3</span><span>W. Swdef — 1:33.040</span>
+  <div class="pos mono" aria-label="Current top three">
+    <span>P1</span><span>T. Winner</span><span>0:30.040</span>
+    <span>P2</span><span>L. Qswde</span><span>1:22.010</span>
+    <span>P3</span><span>W. Swdef</span><span>1:33.040</span>
   </div>
   <div class="head-block">
     <span class="eyebrow micro">The Flint Grand Prix</span>
-    <h1>Fastest lap wins.</h1>
+    <h1>Fastest lap <mark>wins.</mark></h1>
     <p class="head-two">Slow laps get stickers.</p>
-    <p class="head-sub">Stop by booth #### to get on the leaderboard</p>
-    <p class="head-note">Fresh board every morning · resets <b>9:00 AM PT</b></p>
+    <p class="head-sub">Stop by booth #### to get on the leaderboard. Fresh board every morning — resets 9:00 AM PT.</p>
   </div>
 </section>
 
 <div class="util micro">
-  <span class="arrows" aria-hidden="true"><button type="button">←</button><button type="button">→</button></span>
-  <a class="link" href="#">2026 Season →</a>
   <a class="link" href="#board">Full standings →</a>
+  <a class="link" href="#flint">What is Flint →</a>
   <span class="spacer"></span>
-  <span class="ttb mono">TIME TO BEAT&nbsp;&nbsp;0 : 30 . 040</span>
-  <button class="pill" type="button">Booth # Coming Soon</button>
+  <span class="ttb mono">TIME TO BEAT<b>0:30.040</b></span>
 </div>
 
 <section class="band" aria-label="Day 2 — Sierra Nublada">
@@ -337,62 +334,98 @@
   <span class="caption micro">Sierra Nublada · Day 2 · Live from the booth</span>
 </section>
 
-<section class="board" id="board">
-  <div class="board-head micro">
-    <h2>Live leaderboard</h2>
-    <span class="live"><span class="live-dot"></span>Live</span>
-    <span class="where">Day 2 · Sierra Nublada</span>
-    <span class="tag">Fresh board every morning, so a slow start's no excuse.</span>
-  </div>
+<div class="checker" aria-hidden="true"></div>
 
-  <div class="podium">
-    <div>
-      <div class="p-pos micro"><span>Pos. 02</span><span>Silver</span></div>
-      <div class="p-name">L. Qswde</div>
-      <div class="p-time mono">1:22.010</div>
+<section class="board-wrap" id="board">
+  <div class="board-card">
+    <div class="chrome micro">
+      <span class="live"><span class="live-dot"></span>Live leaderboard</span>
+      <span class="where">Day 2 · Sierra Nublada</span>
     </div>
-    <div class="first">
-      <div class="p-pos micro"><span>Pos. 01</span><span>Fastest lap</span></div>
-      <div class="p-name">T. Winner</div>
-      <div class="p-time mono">0:30.040</div>
+    <div class="embed">
+      <div class="podium">
+        <div>
+          <div class="p-pos micro"><span>P2</span><span>Silver</span></div>
+          <div class="p-name">L. Qswde</div>
+          <div class="p-time mono">1:22.010</div>
+        </div>
+        <div class="first">
+          <div class="p-pos micro"><span>P1</span><span>Fastest lap</span></div>
+          <div class="p-name">T. Winner</div>
+          <div class="p-time mono"><b>0:30.040</b></div>
+        </div>
+        <div>
+          <div class="p-pos micro"><span>P3</span><span>Bronze</span></div>
+          <div class="p-name">W. Swdef</div>
+          <div class="p-time mono">1:33.040</div>
+        </div>
+      </div>
+      <div class="ttb-row">
+        <span class="micro">Time to beat</span>
+        <span class="t mono">0:30.040</span>
+      </div>
+      <div class="rows">
+        <div class="row">
+          <span class="r-num mono">04</span>
+          <span class="r-name">L. James</span>
+          <span class="r-time mono">2:10.100</span>
+        </div>
+        <div class="row you">
+          <span class="r-num mono">05</span>
+          <span class="r-name" style="font-weight:400">Your name here — stop by the booth</span>
+          <span class="r-time mono">—:—.———</span>
+        </div>
+      </div>
     </div>
-    <div>
-      <div class="p-pos micro"><span>Pos. 03</span><span>Bronze</span></div>
-      <div class="p-name">W. Swdef</div>
-      <div class="p-time mono">1:33.040</div>
+    <div class="board-foot micro">
+      <span>Updated 25 hrs ago</span>
+      <span>Resets 9:00 AM PT</span>
     </div>
   </div>
-
-  <div class="ttb-row">
-    <span class="micro">Time to beat</span>
-    <span class="t mono">0 : 30 . 040</span>
-  </div>
-
-  <div class="rows">
-    <div class="row">
-      <span class="r-num mono">04</span>
-      <span class="r-name">L. James</span>
-      <span class="r-time mono">2:10.100</span>
-    </div>
-    <div class="row you">
-      <span class="r-num mono">05</span>
-      <span class="r-name" style="font-style:italic;text-transform:none;letter-spacing:.02em">Your name here — stop by the booth</span>
-      <span class="r-time mono">—:—.———</span>
-    </div>
-  </div>
-
-  <div class="board-foot micro">
-    <span>Updated 25 hrs ago</span>
-    <span>Resets 9:00 AM PT</span>
+  <div class="board-head">
+    <h2>Fresh board every morning.</h2>
+    <p>So a slow start's no excuse. Set a lap at the booth and watch your name move — the board updates live all day.</p>
   </div>
 </section>
 
-<section class="cta" aria-label="Visit the Flint booth">
-  <div class="ticker micro" aria-hidden="true">
-    <div class="ticker-track">
-      <span>Fastest lap wins&nbsp;&nbsp;·&nbsp;&nbsp;Slow laps get stickers&nbsp;&nbsp;·&nbsp;&nbsp;Stop by booth ####&nbsp;&nbsp;·&nbsp;&nbsp;Fresh board every morning&nbsp;&nbsp;·&nbsp;&nbsp;Fastest lap wins&nbsp;&nbsp;·&nbsp;&nbsp;Slow laps get stickers&nbsp;&nbsp;·&nbsp;&nbsp;Stop by booth ####&nbsp;&nbsp;·&nbsp;&nbsp;Fresh board every morning&nbsp;&nbsp;·&nbsp;&nbsp;</span><span>Fastest lap wins&nbsp;&nbsp;·&nbsp;&nbsp;Slow laps get stickers&nbsp;&nbsp;·&nbsp;&nbsp;Stop by booth ####&nbsp;&nbsp;·&nbsp;&nbsp;Fresh board every morning&nbsp;&nbsp;·&nbsp;&nbsp;Fastest lap wins&nbsp;&nbsp;·&nbsp;&nbsp;Slow laps get stickers&nbsp;&nbsp;·&nbsp;&nbsp;Stop by booth ####&nbsp;&nbsp;·&nbsp;&nbsp;Fresh board every morning&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+<section class="meta-sec">
+  <div>
+    <span class="lbl micro">This is a Flint page</span>
+  </div>
+  <div class="body">
+    <h2 style="margin-bottom:22px">Everything you're looking at was built by an agent.</h2>
+    <p>The layout, the copy, the frame around that live leaderboard — <b>described in plain English, designed and shipped by Flint</b>. No template, no dev queue, no handoff.</p>
+    <p>That's the pitch, and this page is the demo. The same way it went live, your next landing page could be live before your coffee's done.</p>
+  </div>
+</section>
+
+<section class="sectors" id="flint">
+  <div class="sectors-inner">
+    <div class="sectors-head">
+      <h2>If you can dream it, Flint builds it.</h2>
+      <p>Flint is an agentic website platform. Three sectors, one flying lap from idea to live page.</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="s micro"><b>S1</b><span class="mono">0:00.000</span></div>
+        <h3>Describe it</h3>
+        <p>Tell Flint what you want in plain English — a page, a flow, a whole site. Brand guidelines welcome, not required.</p>
+      </div>
+      <div class="card">
+        <div class="s micro"><b>S2</b><span class="mono">0:12.400</span></div>
+        <h3>Watch it build</h3>
+        <p>Flint's agents design, write, and wire it up — on brand, responsive, and connected to your data. In minutes, not sprints.</p>
+      </div>
+      <div class="card">
+        <div class="s micro"><b>S3</b><span class="mono">0:30.040</span></div>
+        <h3>Ship it live</h3>
+        <p>Review, tweak, publish. Every page stays live-editable — like this one, which updates itself every morning.</p>
+      </div>
     </div>
   </div>
+</section>
+
+<section class="cta" id="visit" aria-label="Visit the Flint booth">
   <div class="cta-inner">
     <div class="cta-top micro">
       <span>Lights out in 3… 2… 1…</span>
@@ -400,27 +433,49 @@
         <i class="light" style="--i:0"></i><i class="light" style="--i:1"></i><i class="light" style="--i:2"></i><i class="light" style="--i:3"></i><i class="light" style="--i:4"></i>
       </span>
     </div>
-    <h2>Put Flint between your <em>ad spend</em> and your <em>pages</em>.</h2>
+    <h2>Put Flint between your <mark>ad spend</mark> and your pages.</h2>
+    <p class="sub">Watch a Flint agent build a page for your brand, live at the booth. Bring a URL, leave with a lap time.</p>
     <div class="cta-actions">
-      <a class="btn btn-solid" href="#">See Flint build one →</a>
-      <a class="btn btn-ghost" href="#">Find us on the Expo floor</a>
+      <a class="btn btn-yellow" href="#">See Flint build one →</a>
+      <a class="btn btn-ghost-dark" href="#">Find us on the Expo floor</a>
       <span class="spacer"></span>
       <a class="site mono" href="#">FLINT.COM →</a>
     </div>
   </div>
 </section>
 
-<div class="checker" aria-hidden="true"></div>
-
 <footer>
   <span class="builtwith">
     <svg width="18" height="17" viewBox="0 0 26 24" fill="none" aria-hidden="true">
-      <path d="M2 3.5 24 1l-2.2 5L2 8.5V3.5Z" fill="#111013"/>
-      <path d="M2 10.5 20.6 8l-2.2 5L2 15.5v-5Z" fill="#111013"/>
-      <path d="M2 17.5 17.2 15l-2.2 5L2 22v-4.5Z" fill="#111013"/>
+      <path d="M2 3.5 24 1l-2.2 5L2 8.5V3.5Z" fill="#0E0E10"/>
+      <path d="M2 10.5 20.6 8l-2.2 5L2 15.5v-5Z" fill="#0E0E10"/>
+      <path d="M2 17.5 17.2 15l-2.2 5L2 22v-4.5Z" fill="#0E0E10"/>
     </svg>
     Built with Flint
   </span>
   <span class="spacer"></span>
-  <span class="f-note micro">The Flint Grand Prix · A8UP 2026 · Sierra Nublada</span>
+  <span class="f-note micro">The Flint Grand Prix · A8UP 2026 · flint.com</span>
 </footer>
+
+<script>
+  (function(){
+    var rm = matchMedia('(prefers-reduced-motion: reduce)');
+    var band = document.querySelector('.band');
+    var num = document.querySelector('.band .numeral');
+    var ring = document.querySelector('.band .ring');
+    if (rm.matches || !band) return;
+    var ticking = false;
+    function update(){
+      ticking = false;
+      var r = band.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > innerHeight) return;
+      var p = (r.top + r.height/2 - innerHeight/2) / innerHeight;
+      num.style.transform = 'translateY(' + (p * 70).toFixed(1) + 'px)';
+      ring.style.transform = 'translateY(calc(-50% + ' + (p * 130).toFixed(1) + 'px))';
+    }
+    addEventListener('scroll', function(){
+      if (!ticking){ ticking = true; requestAnimationFrame(update); }
+    }, {passive:true});
+    update();
+  })();
+</script>
