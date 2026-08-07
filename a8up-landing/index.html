@@ -5,15 +5,18 @@
   :root{
     --paper:#FFFFFF;
     --panel:#F9F9F9;
+    --panel-deep:#F3F3F0;
     --ink:#0E0E10;
     --mut:#6E6E74;
     --yellow:#F7F83B;
-    --hair:rgba(14,14,16,.14);
-    --hair-strong:rgba(14,14,16,.85);
+    --hair:rgba(14,14,16,.12);
+    --card-line:rgba(14,14,16,.14);
     --mono:"SF Mono", ui-monospace, "Cascadia Mono", "Roboto Mono", Menlo, monospace;
     --grot:"Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
-    --lift:0 1px 2px rgba(14,14,16,.04), 0 16px 40px rgba(14,14,16,.07);
-    --lift-big:0 2px 4px rgba(14,14,16,.05), 0 32px 80px rgba(14,14,16,.12);
+    /* embed palette — matches the live Supabase widget, do not reuse elsewhere */
+    --em-navy:#1E2464;
+    --em-lime:#EEF23F;
+    --em-side:#FAFAF6;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -23,207 +26,246 @@
   }
   body{
     background:var(--paper);color:var(--ink);
-    font-family:var(--grot);-webkit-font-smoothing:antialiased;line-height:1.4;
+    font-family:var(--grot);-webkit-font-smoothing:antialiased;line-height:1.45;
   }
   a{color:inherit;text-decoration:none}
-  a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
-
-  .micro{font-size:10px;letter-spacing:.15em;text-transform:uppercase;font-weight:600}
+  a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 36px}
+  .micro{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
   .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
-  mark{
-    background:var(--yellow);color:inherit;
-    padding:0 .06em;box-decoration-break:clone;-webkit-box-decoration-break:clone;
-  }
 
-  /* ---------- header ---------- */
-  header{
-    display:grid;grid-template-columns:1fr auto;
-    border-bottom:1px solid var(--hair);
-    position:sticky;top:0;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);z-index:50;
+  .btn{
+    display:inline-block;border:0;border-radius:10px;padding:14px 24px;cursor:pointer;
+    font-family:var(--grot);font-size:15px;font-weight:600;letter-spacing:-.01em;
+    transition:transform .15s,box-shadow .15s,background .15s,color .15s,border-color .15s;
   }
-  .masthead{display:flex;align-items:center;gap:40px;padding:18px 40px}
+  .btn-yellow{background:var(--yellow);color:var(--ink)}
+  .btn-yellow:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(200,201,20,.35)}
+  .btn-ghost-dark{border:1px solid rgba(255,255,255,.35);color:#fff;background:none}
+  .btn-ghost-dark:hover{border-color:#fff;background:rgba(255,255,255,.06)}
+
+  /* ---------- nav ---------- */
+  .nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--hair);
+  }
+  .nav-inner{display:flex;align-items:center;gap:34px;padding:14px 36px;max-width:1280px;margin:0 auto}
   .logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:21px;letter-spacing:-.02em}
   .logo svg{display:block}
-  nav{display:flex;gap:30px;color:var(--mut)}
-  nav a{padding-bottom:2px}
-  nav a:hover{color:var(--ink)}
-  .head-cta{margin-left:auto}
-  .btn{
-    display:inline-block;border-radius:999px;padding:11px 20px;cursor:pointer;
-    font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;
-    transition:transform .15s,background .15s,color .15s,border-color .15s,box-shadow .15s;
-  }
-  .btn-ink{background:var(--ink);color:#fff}
-  .btn-ink:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(14,14,16,.18)}
-  .btn-yellow{background:var(--yellow);color:var(--ink)}
-  .btn-yellow:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(247,248,59,.35)}
-  .btn-ghost-dark{border:1px solid rgba(255,255,255,.4);color:#fff}
-  .btn-ghost-dark:hover{border-color:#fff;background:rgba(255,255,255,.06)}
-  .day-cell{
-    border-left:1px solid var(--hair);
-    display:flex;flex-direction:column;justify-content:center;align-items:flex-end;
-    padding:0 40px;min-width:280px;gap:7px;
-  }
-  .day-cell i{font-style:italic;font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
-  .day-track{width:120px;height:2px;background:var(--hair);position:relative}
-  .day-track::after{content:"";position:absolute;left:0;top:0;height:100%;width:66%;background:var(--ink)}
+  .nav nav{display:flex;gap:28px;font-size:14.5px;font-weight:500;color:var(--ink)}
+  .nav nav a:hover{color:var(--mut)}
+  .nav .right{margin-left:auto;display:flex;align-items:center;gap:22px;font-size:14.5px;font-weight:500}
+  .nav .btn{padding:11px 20px;font-size:14px}
 
   /* ---------- hero ---------- */
-  .grid{
-    display:grid;grid-template-columns:minmax(280px,400px) minmax(200px,300px) 1fr;
-    gap:0 40px;padding:44px 40px 12px;
+  .hero{
+    background:
+      radial-gradient(rgba(14,14,16,.10) 1px, transparent 1px) 0 0/18px 18px,
+      var(--paper);
   }
-  .sched,.pos{display:grid;grid-template-columns:auto auto 1fr;gap:8px 16px;align-self:start;font-size:11px;color:var(--mut)}
-  .sched .is-now{color:var(--ink);font-weight:700}
-  .head-block{text-align:right;justify-self:end;max-width:820px}
-  .head-block .eyebrow{display:block;margin-bottom:14px;color:var(--mut)}
+  .hero-inner{padding-top:84px}
+  .stat-line{display:flex;align-items:center;gap:10px;color:var(--mut);margin-bottom:34px}
+  .chip{
+    background:var(--panel-deep);border-radius:6px;padding:3px 9px;
+    font-family:var(--mono);font-size:12px;letter-spacing:.02em;color:var(--ink);
+  }
   h1{
-    font-size:clamp(58px,8.2vw,132px);
-    line-height:.94;font-weight:700;letter-spacing:-.03em;
-    text-wrap:balance;
+    font-size:clamp(52px,6.4vw,104px);
+    line-height:1.02;font-weight:700;letter-spacing:-.035em;
+    max-width:20ch;
   }
-  .head-two{margin-top:22px;font-size:clamp(16px,1.6vw,24px);letter-spacing:.02em;font-weight:600;color:var(--ink)}
-  .head-sub{margin-top:12px;font-size:13px;color:var(--mut)}
+  .hero-sub{margin-top:26px;font-size:clamp(17px,1.5vw,22px);color:var(--mut);letter-spacing:-.01em}
+  .hero-sub .fn{
+    color:var(--ink);
+    text-decoration:underline dotted rgba(14,14,16,.5);text-underline-offset:4px;
+  }
+  .capture{
+    margin-top:38px;display:inline-flex;align-items:center;gap:0;
+    background:var(--paper);border:1px solid var(--card-line);border-radius:14px;
+    padding:6px 6px 6px 22px;box-shadow:0 1px 2px rgba(14,14,16,.04);
+  }
+  .capture input{
+    border:0;background:none;font-family:var(--grot);font-size:16px;color:var(--ink);
+    width:min(280px,50vw);
+  }
+  .capture input::placeholder{color:var(--mut)}
 
-  .util{
-    display:flex;align-items:center;gap:32px;
-    padding:26px 40px 34px;
+  /* ---------- collage panel ---------- */
+  .stage{
+    margin-top:64px;position:relative;
+    background:var(--panel-deep);border-radius:16px;
+    height:min(78vh,720px);overflow:hidden;
+    background-image:radial-gradient(rgba(14,14,16,.09) 1px, transparent 1px);
+    background-size:18px 18px;
   }
-  .util .link{color:var(--mut)}
-  .util .link:hover{color:var(--ink)}
-  .util .spacer{flex:1}
-  .ttb{font-size:12px;letter-spacing:.22em;font-weight:600}
-  .ttb b{background:var(--yellow);padding:2px 8px;font-weight:600;margin-left:6px}
-
-  /* ---------- texture band ---------- */
-  .band{
-    position:relative;overflow:hidden;
-    height:min(74vh,680px);
-    background:
-      radial-gradient(85% 65% at 70% 30%, rgba(210,214,222,.5) 0%, rgba(112,118,130,.55) 30%, rgba(38,40,48,.9) 60%, #0b0c10 100%),
-      linear-gradient(160deg,#26282e 0%,#101116 60%,#0b0c10 100%);
-  }
-  .band::before{
-    content:"";position:absolute;inset:0;
-    background:
-      linear-gradient(115deg, transparent 34%, rgba(235,240,245,.13) 45%, rgba(235,240,245,.04) 52%, transparent 60%),
-      radial-gradient(50% 42% at 62% 40%, rgba(255,255,255,.1) 0%, transparent 70%);
-  }
-  .band::after{
-    content:"";position:absolute;inset:0;opacity:.45;mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='0.35'/></svg>");
-  }
-  .band .numeral{
-    position:absolute;left:4vw;bottom:-2vw;z-index:2;
-    color:#fff;font-weight:700;letter-spacing:-.04em;line-height:1;
-    font-size:clamp(150px,22vw,350px);
-    text-shadow:0 0 60px rgba(0,0,0,.25);
+  .doc{
+    position:absolute;background:var(--paper);
+    border:1px solid var(--card-line);
+    box-shadow:0 2px 6px rgba(14,14,16,.05), 0 20px 50px rgba(14,14,16,.08);
     will-change:transform;
   }
-  .band .ring{
-    position:absolute;right:8vw;top:50%;transform:translateY(-50%);z-index:2;
-    width:clamp(200px,24vw,390px);aspect-ratio:1;border:1.5px solid var(--yellow);border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    color:var(--yellow);font-weight:300;font-size:clamp(44px,5.5vw,88px);letter-spacing:.02em;
-    will-change:transform;
+  .handles > i{
+    position:absolute;width:7px;height:7px;background:#fff;border:1.5px solid var(--ink);
+    z-index:3;
   }
-  .band .caption{position:absolute;left:40px;top:26px;z-index:2;color:rgba(255,255,255,.6)}
+  .handles > i:nth-child(1){top:-4px;left:-4px}
+  .handles > i:nth-child(2){top:-4px;right:-4px}
+  .handles > i:nth-child(3){bottom:-4px;left:-4px}
+  .handles > i:nth-child(4){bottom:-4px;right:-4px}
+  .doc .d-label{color:var(--mut);margin-bottom:16px}
+  .skel{display:flex;flex-direction:column;gap:5px}
+  .skel i{height:4px;background:rgba(14,14,16,.12);border-radius:2px}
+  .skel i.s{width:55%}.skel i.m{width:75%}
+
+  .doc-match{top:9%;left:5%;width:380px;padding:22px 24px 26px;z-index:2}
+  .match-row{display:flex;align-items:center;gap:16px}
+  .mini{flex:1;border:1px solid var(--hair);border-radius:6px;padding:14px;background:var(--paper)}
+  .mini .t{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:12px;font-weight:600}
+  .mini .dot{width:9px;height:9px;border-radius:50%;background:rgba(14,14,16,.15)}
+  .dots{color:var(--mut);letter-spacing:2px;font-weight:700}
+
+  .doc-steward{top:20%;left:36%;width:400px;padding:30px 32px;z-index:1}
+  .doc-steward h4{font-size:19px;font-weight:700;letter-spacing:-.01em;border-bottom:1px solid var(--ink);padding-bottom:16px;margin-bottom:16px}
+  .doc-steward h4 sup{font-size:9px;font-weight:500;letter-spacing:.05em}
+  .stew-meta{display:flex;justify-content:space-between;gap:20px;font-size:11px;color:var(--mut);margin-bottom:20px}
+  .stew-meta b{color:var(--ink);font-weight:600}
+  .stew-meta .mono{color:var(--ink)}
+  .stew-table{width:100%;border-collapse:collapse;font-size:12px}
+  .stew-table th{text-align:left;color:var(--mut);font-weight:500;padding:6px 0;border-bottom:1px solid var(--hair)}
+  .stew-table th:last-child,.stew-table td:last-child{text-align:right}
+  .stew-table td{padding:9px 0;border-bottom:1px solid var(--hair)}
+  .stew-total{display:flex;justify-content:space-between;margin-top:14px;font-size:13px}
+  .stew-total b{font-weight:700}
+
+  .doc-flag{top:12%;right:5%;width:250px;padding:20px 22px;z-index:2}
+  .kv{display:flex;justify-content:space-between;font-size:12px;padding:7px 0;border-bottom:1px solid var(--hair)}
+  .kv:last-child{border-bottom:0}
+  .kv span{color:var(--mut)}
+  .kv b{font-weight:600}
+
+  .doc-timing{bottom:9%;right:12%;width:360px;padding:22px 24px;z-index:3}
+  .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+  .field label{display:block;font-size:10px;color:var(--mut);margin-bottom:5px}
+  .field .val{
+    border:1px solid var(--hair);border-radius:6px;padding:9px 11px;font-size:12.5px;color:var(--ink);
+    background:var(--paper);
+  }
+  .field .val.hl{background:var(--yellow);border-color:transparent}
+
+  /* ---------- counters ---------- */
+  .counters{
+    display:flex;align-items:center;gap:0;flex-wrap:wrap;
+    border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+    margin-top:64px;
+  }
+  .counter{
+    display:flex;align-items:center;gap:9px;
+    padding:15px 22px;border-right:1px solid var(--hair);color:var(--mut);
+  }
+  .counter:first-child{padding-left:0}
+  .counter .live-dot{width:7px;height:7px;border-radius:50%;background:var(--ink)}
+  .counter .chip{background:var(--panel-deep)}
+  .counter .chip.y{background:var(--yellow)}
 
   /* ---------- checker transition ---------- */
-  .checker{
-    height:96px;background:var(--yellow);position:relative;
-  }
+  .checker{height:84px;background:var(--yellow);position:relative;margin-top:96px}
   .checker::before{
     content:"";position:absolute;inset:0;
     background:repeating-conic-gradient(var(--ink) 0% 25%, transparent 0% 50%);
-    background-size:96px 96px;
+    background-size:84px 84px;
   }
 
   /* ---------- leaderboard ---------- */
-  .board-wrap{background:var(--panel);padding:0 40px 90px;border-bottom:1px solid var(--hair)}
-  .board-head{max-width:680px;margin:0 auto;text-align:center;padding:74px 0 40px}
-  .board-head h2{font-size:clamp(30px,3.2vw,44px);font-weight:700;letter-spacing:-.02em}
-  .board-head p{margin-top:12px;color:var(--mut);font-size:15px}
-  .board-card{
-    max-width:980px;margin:0 auto;
-    background:var(--paper);border:1px solid var(--hair);border-radius:18px;
-    box-shadow:var(--lift-big);overflow:hidden;
-    position:relative;margin-top:-48px;
+  .board-sec{background:var(--panel);border-bottom:1px solid var(--hair);padding:90px 0 100px}
+  .board-cols{display:grid;grid-template-columns:minmax(280px,420px) 1fr;gap:70px;align-items:start}
+  .board-copy{position:sticky;top:110px}
+  .eyebrow{display:flex;align-items:center;gap:12px;color:var(--mut);margin-bottom:18px}
+  .eyebrow::before{content:"";width:34px;height:1px;background:var(--ink)}
+  .board-copy h2{font-size:clamp(32px,3.6vw,52px);font-weight:700;letter-spacing:-.03em;line-height:1.05;text-wrap:balance}
+  .board-copy p{margin-top:18px;color:var(--mut);font-size:16px;max-width:44ch}
+  .board-copy .foot{margin-top:26px;font-size:12.5px;color:var(--mut)}
+  .board-copy .foot b{color:var(--ink);font-weight:600}
+
+  .embed-frame{position:relative;padding:18px}
+  .embed-frame .sel{
+    position:absolute;inset:0;border:1.5px solid var(--ink);pointer-events:none;
   }
-  .board-card .chrome{
-    display:flex;align-items:center;gap:22px;
-    background:var(--ink);color:rgba(255,255,255,.75);
-    padding:14px 26px;
+  .embed-frame .sel-tag{
+    position:absolute;top:-11px;left:16px;
+    background:var(--ink);color:#fff;padding:4px 10px;
+    font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;
   }
-  .chrome .live{display:inline-flex;align-items:center;gap:7px;color:#fff}
-  .live-dot{width:7px;height:7px;border-radius:50%;background:#3ddc6a;animation:pulse 1.6s ease-out infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(61,220,106,.5)}100%{box-shadow:0 0 0 8px rgba(61,220,106,0)}}
-  .chrome .where{margin-left:auto}
-  .embed{padding:10px 26px 6px}
-  .podium{display:grid;grid-template-columns:1fr 1fr 1fr}
-  .podium > div{padding:26px 20px 28px;border-right:1px solid var(--hair)}
-  .podium > div:last-child{border-right:0}
-  .podium .p-pos{display:flex;justify-content:space-between;margin-bottom:20px;color:var(--mut)}
-  .podium .p-name{font-size:clamp(18px,1.9vw,26px);font-weight:700;letter-spacing:-.01em}
-  .podium .p-time{margin-top:6px;font-size:clamp(16px,1.7vw,22px);color:var(--mut)}
-  .podium .first .p-time b{background:var(--yellow);font-weight:500;padding:1px 7px}
-  .ttb-row{
+  .embed-frame .handles > i{background:#fff}
+
+  /* ----- embed replica: styles frozen to match the live widget ----- */
+  .embed{
+    background:#fff;border:1px solid #E4E4E1;border-radius:16px;
+    padding:26px 28px 18px;font-family:var(--grot);
+    box-shadow:0 1px 3px rgba(14,14,16,.05);
+  }
+  .em-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px}
+  .em-head .t1{font-size:14px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+  .em-head .t2{margin-top:4px;font-size:14px;color:#7A7A80}
+  .em-head .t2 b{color:#0E0E10;font-weight:700}
+  .em-live{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.18em;font-weight:600;color:#3C3C40}
+  .em-live i{width:10px;height:10px;border-radius:50%;background:#2FBF5B;animation:em-pulse 1.6s ease-out infinite}
+  @keyframes em-pulse{0%{box-shadow:0 0 0 0 rgba(47,191,91,.45)}100%{box-shadow:0 0 0 8px rgba(47,191,91,0)}}
+  .em-podium{display:grid;grid-template-columns:1fr 1.12fr 1fr;gap:14px;align-items:center;margin-bottom:16px}
+  .em-card{
+    background:var(--em-side);border:1px solid #ECECE7;border-radius:10px;
+    text-align:center;padding:18px 12px;
+  }
+  .em-card .em-medal{font-size:15px;line-height:1}
+  .em-card .em-pos{font-size:10px;letter-spacing:.2em;font-weight:700;color:#7A7A80;margin:7px 0 5px}
+  .em-card .em-name{font-size:17px;font-weight:800}
+  .em-card .em-time{margin-top:4px;font-size:14px;font-family:var(--mono)}
+  .em-card.em-first{
+    background:var(--em-lime);border-color:#DDE03A;
+    padding:24px 12px;box-shadow:0 6px 16px rgba(200,204,30,.35);
+  }
+  .em-card.em-first .em-medal{font-size:22px}
+  .em-card.em-first .em-pos{color:#3C3C10}
+  .em-ttb{
     display:flex;justify-content:space-between;align-items:center;
-    border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
-    padding:14px 0;
+    background:var(--em-navy);color:#fff;border-radius:9px;
+    padding:15px 20px;margin-bottom:6px;
   }
-  .ttb-row .t{font-size:clamp(19px,2.1vw,27px);letter-spacing:.05em;font-weight:500}
-  .rows .row{
-    display:grid;grid-template-columns:52px 1fr auto;align-items:baseline;
-    padding:14px 0;border-bottom:1px solid var(--hair);font-size:14px;
+  .em-ttb .l{font-size:11px;letter-spacing:.18em;font-weight:700;text-transform:uppercase}
+  .em-ttb .v{font-family:var(--mono);font-size:22px;font-weight:600}
+  .em-row{
+    display:flex;align-items:baseline;gap:18px;
+    padding:14px 6px;border-bottom:1px solid #ECECE7;font-size:15px;
   }
-  .rows .row:last-child{border-bottom:0}
-  .rows .row .r-num{color:var(--mut)}
-  .rows .row .r-name{font-weight:600;letter-spacing:.01em}
-  .rows .you{color:var(--mut);font-style:italic;font-weight:400}
-  .board-foot{
-    display:flex;justify-content:space-between;
-    padding:12px 26px;border-top:1px solid var(--hair);color:var(--mut);background:var(--panel);
-  }
+  .em-row .n{color:#A0A0A4;font-weight:600}
+  .em-row .nm{font-weight:600}
+  .em-row .tm{margin-left:auto;font-family:var(--mono)}
+  .em-foot{text-align:center;color:#A0A0A4;font-size:13px;padding:14px 0 4px}
 
-  /* ---------- this is a flint page ---------- */
-  .meta-sec{
-    display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:60px;
-    padding:100px 40px;max-width:1240px;margin:0 auto;align-items:start;
-  }
-  .meta-sec .lbl{color:var(--mut);display:flex;align-items:center;gap:12px}
-  .meta-sec .lbl::before{content:"";width:34px;height:1px;background:var(--ink)}
-  .meta-sec h2{font-size:clamp(30px,3.4vw,48px);font-weight:700;letter-spacing:-.02em;text-wrap:balance}
-  .meta-sec .body p{font-size:17px;line-height:1.65;color:var(--mut);max-width:56ch}
-  .meta-sec .body p + p{margin-top:18px}
-  .meta-sec .body b{color:var(--ink);font-weight:600}
-
-  /* ---------- what is flint ---------- */
-  .sectors{background:var(--panel);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
-  .sectors-inner{max-width:1240px;margin:0 auto;padding:90px 40px 100px}
-  .sectors-head{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;margin-bottom:44px;flex-wrap:wrap}
-  .sectors-head h2{font-size:clamp(30px,3.4vw,48px);font-weight:700;letter-spacing:-.02em;max-width:22ch;text-wrap:balance}
-  .sectors-head p{color:var(--mut);font-size:15px;max-width:38ch}
-  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  /* ---------- flint section ---------- */
+  .flint-sec{padding:100px 0}
+  .flint-head{max-width:760px}
+  .flint-head h2{font-size:clamp(32px,3.6vw,52px);font-weight:700;letter-spacing:-.03em;line-height:1.05;text-wrap:balance}
+  .flint-head p{margin-top:20px;font-size:17px;line-height:1.65;color:var(--mut)}
+  .flint-head p b{color:var(--ink);font-weight:600}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:52px}
   .card{
-    background:var(--paper);border:1px solid var(--hair);border-radius:16px;
-    padding:28px 26px 30px;box-shadow:var(--lift);
-    transition:transform .2s,box-shadow .2s;
+    background:var(--paper);border:1px solid var(--card-line);border-radius:14px;
+    padding:26px 24px 28px;transition:transform .2s,box-shadow .2s;
   }
-  .card:hover{transform:translateY(-3px);box-shadow:var(--lift-big)}
-  .card .s{color:var(--mut);display:flex;justify-content:space-between;margin-bottom:38px}
+  .card:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(14,14,16,.04),0 24px 48px rgba(14,14,16,.09)}
+  .card .s{display:flex;justify-content:space-between;color:var(--mut);margin-bottom:36px}
   .card .s b{color:var(--ink);font-weight:700}
-  .card h3{font-size:20px;font-weight:700;letter-spacing:-.01em}
-  .card p{margin-top:10px;color:var(--mut);font-size:14px;line-height:1.6}
+  .card h3{font-size:19px;font-weight:700;letter-spacing:-.01em}
+  .card p{margin-top:9px;color:var(--mut);font-size:14px;line-height:1.6}
 
   /* ---------- cta ---------- */
   .cta{background:var(--ink);color:#fff;overflow:hidden}
-  .cta-inner{max-width:1240px;margin:0 auto;padding:96px 40px 88px;display:flex;flex-direction:column;gap:44px}
+  .cta-inner{padding:100px 36px 90px;max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
   .cta-top{display:flex;justify-content:space-between;align-items:center;color:rgba(255,255,255,.5)}
   .lights{display:flex;gap:11px}
   .light{
-    width:12px;height:12px;border-radius:50%;
-    border:1px solid rgba(255,255,255,.3);
+    width:12px;height:12px;border-radius:50%;border:1px solid rgba(255,255,255,.3);
     animation:lightup 6s infinite;animation-delay:calc(var(--i) * .45s);
   }
   @keyframes lightup{
@@ -233,54 +275,59 @@
   }
   @media (prefers-reduced-motion: reduce){.light{background:var(--yellow)}}
   .cta h2{
-    font-size:clamp(40px,5.6vw,84px);
-    line-height:1.02;font-weight:700;letter-spacing:-.025em;
-    text-wrap:balance;max-width:1100px;
+    font-size:clamp(38px,5.2vw,78px);line-height:1.04;font-weight:700;letter-spacing:-.03em;
+    text-wrap:balance;max-width:1050px;
   }
-  .cta h2 mark{background:var(--yellow);padding:0 .1em}
-  .cta .sub{color:rgba(255,255,255,.55);font-size:16px;max-width:52ch;margin-top:-18px}
+  .cta h2 mark{background:var(--yellow);color:var(--ink);padding:0 .1em}
+  .cta .sub{color:rgba(255,255,255,.55);font-size:16px;max-width:52ch;margin-top:-14px}
   .cta-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-  .cta-actions .btn{padding:16px 28px;font-size:11px}
-  .cta-actions .spacer{flex:1}
-  .cta-actions .site{color:rgba(255,255,255,.55);font-size:12px;letter-spacing:.22em}
+  .cta-actions .site{margin-left:auto;color:rgba(255,255,255,.55);font-size:12px;letter-spacing:.22em}
   .cta-actions .site:hover{color:#fff}
 
   /* ---------- footer ---------- */
-  footer{display:flex;align-items:center;gap:24px;padding:22px 40px;background:var(--paper)}
+  footer{background:var(--paper)}
+  .foot-inner{
+    display:flex;align-items:center;gap:24px;flex-wrap:wrap;
+    padding:22px 36px;max-width:1280px;margin:0 auto;
+  }
   .builtwith{
     display:inline-flex;align-items:center;gap:8px;
-    background:var(--yellow);padding:8px 14px;border-radius:6px;
+    background:var(--yellow);padding:8px 14px;border-radius:8px;
     font-weight:700;font-size:13px;letter-spacing:-.01em;
   }
-  footer .spacer{flex:1}
-  footer .f-note{color:var(--mut)}
+  .foot-inner .spacer{flex:1}
+  .foot-inner .f-note{color:var(--mut)}
+  .footnote{color:var(--mut);font-size:11.5px;width:100%;padding-top:6px}
 
   /* ---------- responsive ---------- */
-  @media (max-width:960px){
-    .masthead{padding:14px 20px;gap:20px}
-    nav,.head-cta{display:none}
-    .day-cell{min-width:0;padding:0 20px}
-    .grid{grid-template-columns:1fr;gap:26px;padding:32px 20px 8px}
-    .head-block{text-align:left;justify-self:start}
-    .util{flex-wrap:wrap;gap:14px;padding:20px}
-    .board-wrap{padding:0 20px 60px}
-    .board-card{margin-top:-32px}
-    .podium{grid-template-columns:1fr}
-    .podium > div{border-right:0;border-bottom:1px solid var(--hair)}
-    .meta-sec{grid-template-columns:1fr;gap:24px;padding:60px 20px}
-    .sectors-inner{padding:60px 20px}
+  @media (max-width:1080px){
+    .doc-steward{left:28%}
+    .board-cols{grid-template-columns:1fr;gap:44px}
+    .board-copy{position:static}
+  }
+  @media (max-width:820px){
+    .nav nav,.nav .right .plain{display:none}
+    .nav-inner{padding:12px 20px}
+    .wrap{padding:0 20px}
+    .hero-inner{padding-top:52px}
+    .capture{width:100%;justify-content:space-between}
+    .stage{height:auto;padding:20px;display:flex;flex-direction:column;gap:16px}
+    .doc{position:static;width:100%!important}
+    .counters{margin-top:44px}
+    .counter{padding:12px 14px}
+    .checker{height:56px;margin-top:56px}
+    .checker::before{background-size:56px 56px}
+    .board-sec,.flint-sec{padding:60px 0}
     .cards{grid-template-columns:1fr}
-    .cta-inner{padding:64px 20px;gap:32px}
-    .cta-actions .spacer{display:none}
-    footer{padding:18px 20px;flex-wrap:wrap}
-    .checker{height:64px}
-    .checker::before{background-size:64px 64px}
-    .band .caption{left:20px}
+    .cta-inner{padding:64px 20px}
+    .cta-actions .site{margin-left:0}
+    .foot-inner{padding:18px 20px}
+    .em-podium{grid-template-columns:1fr;gap:10px}
   }
 </style>
 
-<header>
-  <div class="masthead">
+<div class="nav">
+  <div class="nav-inner">
     <a class="logo" href="#" aria-label="Flint home">
       <svg width="24" height="22" viewBox="0 0 26 24" fill="none" aria-hidden="true">
         <path d="M2 3.5 24 1l-2.2 5L2 8.5V3.5Z" fill="var(--ink)"/>
@@ -289,121 +336,158 @@
       </svg>
       Flint
     </a>
-    <nav class="micro" aria-label="Main">
+    <nav aria-label="Main">
       <a href="#board">Leaderboard</a>
       <a href="#flint">What is Flint</a>
       <a href="#visit">Find us</a>
     </nav>
-    <span class="head-cta"><a class="btn btn-ink" href="#visit">See Flint build one</a></span>
+    <span class="right">
+      <a class="plain" href="#">flint.com</a>
+      <a class="btn btn-yellow" href="#visit">See Flint build one</a>
+    </span>
   </div>
-  <div class="day-cell">
-    <i>Day 2 of 3 — A8UP</i>
-    <span class="day-track" aria-hidden="true"></span>
-  </div>
-</header>
-
-<section class="grid">
-  <div class="sched mono" aria-label="Schedule">
-    <span>1</span><span>04/08</span><span>Sierra Nublada — Qualifying</span>
-    <span class="is-now">2</span><span class="is-now">05/08</span><span class="is-now">Sierra Nublada — Open competition</span>
-    <span>3</span><span>06/08</span><span>Sierra Nublada — Finals &amp; podium</span>
-  </div>
-  <div class="pos mono" aria-label="Current top three">
-    <span>P1</span><span>T. Winner</span><span>0:30.040</span>
-    <span>P2</span><span>L. Qswde</span><span>1:22.010</span>
-    <span>P3</span><span>W. Swdef</span><span>1:33.040</span>
-  </div>
-  <div class="head-block">
-    <span class="eyebrow micro">The Flint Grand Prix</span>
-    <h1>Fastest lap <mark>wins.</mark></h1>
-    <p class="head-two">Slow laps get stickers.</p>
-    <p class="head-sub">Stop by booth #### to get on the leaderboard. Fresh board every morning — resets 9:00 AM PT.</p>
-  </div>
-</section>
-
-<div class="util micro">
-  <a class="link" href="#board">Full standings →</a>
-  <a class="link" href="#flint">What is Flint →</a>
-  <span class="spacer"></span>
-  <span class="ttb mono">TIME TO BEAT<b>0:30.040</b></span>
 </div>
 
-<section class="band" aria-label="Day 2 — Sierra Nublada">
-  <span class="numeral" aria-hidden="true">A8</span>
-  <span class="ring" aria-hidden="true">UP</span>
-  <span class="caption micro">Sierra Nublada · Day 2 · Live from the booth</span>
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="stat-line micro">
+      <span>A8UP attendees with a lap time:</span>
+      <span class="chip">3.2861042%</span>
+    </div>
+    <h1>Fastest lap wins.<br>Slow laps get stickers.</h1>
+    <p class="hero-sub">Stop by booth #### to set your lap — <span class="fn">fresh board*</span> every morning.</p>
+    <form class="capture" onsubmit="return false">
+      <input type="email" placeholder="Where should we send your lap time?" aria-label="Work email">
+      <button class="btn btn-yellow" type="submit">Get on the leaderboard</button>
+    </form>
+
+    <div class="stage" aria-label="Race control paperwork, illustrated">
+      <div class="doc doc-match handles">
+        <i></i><i></i><i></i><i></i>
+        <div class="d-label micro">Matching lap to driver</div>
+        <div class="match-row">
+          <div class="mini">
+            <div class="t"><span>LAP #1384</span><span class="dot"></span></div>
+            <div class="skel"><i></i><i class="m"></i><i></i><i class="s"></i></div>
+          </div>
+          <span class="dots">···</span>
+          <div class="mini">
+            <div class="t"><span>DRV #1384</span><span class="dot"></span></div>
+            <div class="skel"><i></i><i class="m"></i><i></i><i class="s"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc doc-steward">
+        <h4>Sierra Nublada Circuit<sup>™</sup></h4>
+        <div class="stew-meta">
+          <span><b>Driver:</b><br>T. Winner<br>Car #08, Flint Racing</span>
+          <span style="text-align:right"><b>Lap details:</b><br>Date <span class="mono">05/08/26</span><br>Lap <span class="mono">#1384</span></span>
+        </div>
+        <table class="stew-table">
+          <tr><th>Sector</th><th>Split</th><th>Cumulative</th></tr>
+          <tr><td>Sector 1</td><td class="mono">0:08.120</td><td class="mono">0:08.120</td></tr>
+          <tr><td>Sector 2</td><td class="mono">0:10.480</td><td class="mono">0:18.600</td></tr>
+          <tr><td>Sector 3</td><td class="mono">0:11.440</td><td class="mono">0:30.040</td></tr>
+        </table>
+        <div class="stew-total"><span>Penalties</span><span class="mono">+0.000</span></div>
+        <div class="stew-total"><b>Official time</b><b class="mono">0:30.040</b></div>
+      </div>
+
+      <div class="doc doc-flag handles">
+        <i></i><i></i><i></i><i></i>
+        <div class="d-label micro">Flagged for stewards</div>
+        <div class="kv"><span>Incident</span><b>Corner cut, T4</b></div>
+        <div class="kv"><span>Lap #</span><b class="mono">1384</b></div>
+        <div class="kv"><span>Penalty</span><b class="mono">+5.000s</b></div>
+      </div>
+
+      <div class="doc doc-timing handles">
+        <i></i><i></i><i></i><i></i>
+        <div class="d-label micro">Auto-timing</div>
+        <div class="fields">
+          <div class="field"><label>Sector</label><div class="val">Sector 3</div></div>
+          <div class="field"><label>Split</label><div class="val mono hl">0:11.440</div></div>
+          <div class="field"><label>Category</label><div class="val">Flying lap</div></div>
+          <div class="field"><label>Circuit</label><div class="val">Sierra Nublada</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="counters micro" aria-label="Today at the booth">
+      <span class="counter"><span class="live-dot"></span>Pit wall, today:</span>
+      <span class="counter">Laps set <span class="chip mono">217</span></span>
+      <span class="counter">Stickers issued <span class="chip mono">512</span></span>
+      <span class="counter">Fastest lap <span class="chip mono y">0:30.040</span></span>
+      <span class="counter">Board resets <span class="chip mono">9:00 AM PT</span></span>
+      <span class="counter">Days left <span class="chip mono">2</span></span>
+    </div>
+  </div>
 </section>
 
 <div class="checker" aria-hidden="true"></div>
 
-<section class="board-wrap" id="board">
-  <div class="board-card">
-    <div class="chrome micro">
-      <span class="live"><span class="live-dot"></span>Live leaderboard</span>
-      <span class="where">Day 2 · Sierra Nublada</span>
+<section class="board-sec" id="board">
+  <div class="wrap board-cols">
+    <div class="board-copy">
+      <span class="eyebrow micro">Live leaderboard</span>
+      <h2>The board is live. Your name isn't on it yet.</h2>
+      <p>Set a lap at the booth and watch yourself move up in real time. Fresh board every morning, so a slow start's no excuse.</p>
+      <p class="foot">Live timing, straight from the booth — <b>updates all day</b>, resets 9:00 AM PT.</p>
     </div>
-    <div class="embed">
-      <div class="podium">
-        <div>
-          <div class="p-pos micro"><span>P2</span><span>Silver</span></div>
-          <div class="p-name">L. Qswde</div>
-          <div class="p-time mono">1:22.010</div>
+    <div class="embed-frame">
+      <span class="sel" aria-hidden="true"></span>
+      <span class="sel-tag">Live from booth ####</span>
+      <span class="handles" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <div class="embed" aria-label="Live leaderboard">
+        <div class="em-head">
+          <div>
+            <div class="t1">Live leaderboard</div>
+            <div class="t2"><b>Day 2</b> · Sierra Nublada</div>
+          </div>
+          <span class="em-live"><i></i>LIVE</span>
         </div>
-        <div class="first">
-          <div class="p-pos micro"><span>P1</span><span>Fastest lap</span></div>
-          <div class="p-name">T. Winner</div>
-          <div class="p-time mono"><b>0:30.040</b></div>
+        <div class="em-podium">
+          <div class="em-card">
+            <div class="em-medal">🥈</div>
+            <div class="em-pos">2ND</div>
+            <div class="em-name">L. Qswde</div>
+            <div class="em-time">1:22.010</div>
+          </div>
+          <div class="em-card em-first">
+            <div class="em-medal">🏆</div>
+            <div class="em-pos">1ST</div>
+            <div class="em-name">T. Winner</div>
+            <div class="em-time">0:30.040</div>
+          </div>
+          <div class="em-card">
+            <div class="em-medal">🥉</div>
+            <div class="em-pos">3RD</div>
+            <div class="em-name">W. Swdef</div>
+            <div class="em-time">1:33.040</div>
+          </div>
         </div>
-        <div>
-          <div class="p-pos micro"><span>P3</span><span>Bronze</span></div>
-          <div class="p-name">W. Swdef</div>
-          <div class="p-time mono">1:33.040</div>
+        <div class="em-ttb">
+          <span class="l">Time to beat</span>
+          <span class="v">0:30.040</span>
         </div>
-      </div>
-      <div class="ttb-row">
-        <span class="micro">Time to beat</span>
-        <span class="t mono">0:30.040</span>
-      </div>
-      <div class="rows">
-        <div class="row">
-          <span class="r-num mono">04</span>
-          <span class="r-name">L. James</span>
-          <span class="r-time mono">2:10.100</span>
+        <div class="em-row">
+          <span class="n">4</span>
+          <span class="nm">L. James</span>
+          <span class="tm">2:10.100</span>
         </div>
-        <div class="row you">
-          <span class="r-num mono">05</span>
-          <span class="r-name" style="font-weight:400">Your name here — stop by the booth</span>
-          <span class="r-time mono">—:—.———</span>
-        </div>
+        <div class="em-foot">Updated 52 hrs ago · resets 9:00 AM PT</div>
       </div>
     </div>
-    <div class="board-foot micro">
-      <span>Updated 25 hrs ago</span>
-      <span>Resets 9:00 AM PT</span>
-    </div>
-  </div>
-  <div class="board-head">
-    <h2>Fresh board every morning.</h2>
-    <p>So a slow start's no excuse. Set a lap at the booth and watch your name move — the board updates live all day.</p>
   </div>
 </section>
 
-<section class="meta-sec">
-  <div>
-    <span class="lbl micro">This is a Flint page</span>
-  </div>
-  <div class="body">
-    <h2 style="margin-bottom:22px">Everything you're looking at was built by an agent.</h2>
-    <p>The layout, the copy, the frame around that live leaderboard — <b>described in plain English, designed and shipped by Flint</b>. No template, no dev queue, no handoff.</p>
-    <p>That's the pitch, and this page is the demo. The same way it went live, your next landing page could be live before your coffee's done.</p>
-  </div>
-</section>
-
-<section class="sectors" id="flint">
-  <div class="sectors-inner">
-    <div class="sectors-head">
-      <h2>If you can dream it, Flint builds it.</h2>
-      <p>Flint is an agentic website platform. Three sectors, one flying lap from idea to live page.</p>
+<section class="flint-sec" id="flint">
+  <div class="wrap">
+    <div class="flint-head">
+      <span class="eyebrow micro">This is a Flint page</span>
+      <h2>Everything you're looking at was built by an agent.</h2>
+      <p>Flint is an agentic website platform. The layout, the copy, the frame around that live leaderboard — <b>described in plain English, designed and shipped by Flint</b>. No template, no dev queue, no handoff. Three sectors, one flying lap from idea to live page.</p>
     </div>
     <div class="cards">
       <div class="card">
@@ -438,40 +522,43 @@
     <div class="cta-actions">
       <a class="btn btn-yellow" href="#">See Flint build one →</a>
       <a class="btn btn-ghost-dark" href="#">Find us on the Expo floor</a>
-      <span class="spacer"></span>
       <a class="site mono" href="#">FLINT.COM →</a>
     </div>
   </div>
 </section>
 
 <footer>
-  <span class="builtwith">
-    <svg width="18" height="17" viewBox="0 0 26 24" fill="none" aria-hidden="true">
-      <path d="M2 3.5 24 1l-2.2 5L2 8.5V3.5Z" fill="#0E0E10"/>
-      <path d="M2 10.5 20.6 8l-2.2 5L2 15.5v-5Z" fill="#0E0E10"/>
-      <path d="M2 17.5 17.2 15l-2.2 5L2 22v-4.5Z" fill="#0E0E10"/>
-    </svg>
-    Built with Flint
-  </span>
-  <span class="spacer"></span>
-  <span class="f-note micro">The Flint Grand Prix · A8UP 2026 · flint.com</span>
+  <div class="foot-inner">
+    <span class="builtwith">
+      <svg width="18" height="17" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 3.5 24 1l-2.2 5L2 8.5V3.5Z" fill="#0E0E10"/>
+        <path d="M2 10.5 20.6 8l-2.2 5L2 15.5v-5Z" fill="#0E0E10"/>
+        <path d="M2 17.5 17.2 15l-2.2 5L2 22v-4.5Z" fill="#0E0E10"/>
+      </svg>
+      Built with Flint
+    </span>
+    <span class="spacer"></span>
+    <span class="f-note micro">The Flint Grand Prix · A8UP 2026 · flint.com</span>
+    <span class="footnote">*Fresh board resets every morning at 9:00 AM PT. Slow laps still get stickers.</span>
+  </div>
 </footer>
 
 <script>
   (function(){
     var rm = matchMedia('(prefers-reduced-motion: reduce)');
-    var band = document.querySelector('.band');
-    var num = document.querySelector('.band .numeral');
-    var ring = document.querySelector('.band .ring');
-    if (rm.matches || !band) return;
+    if (rm.matches) return;
+    var stage = document.querySelector('.stage');
+    var docs = Array.prototype.slice.call(document.querySelectorAll('.stage .doc'));
+    var speeds = [18, 34, 24, 44];
     var ticking = false;
     function update(){
       ticking = false;
-      var r = band.getBoundingClientRect();
+      var r = stage.getBoundingClientRect();
       if (r.bottom < 0 || r.top > innerHeight) return;
       var p = (r.top + r.height/2 - innerHeight/2) / innerHeight;
-      num.style.transform = 'translateY(' + (p * 70).toFixed(1) + 'px)';
-      ring.style.transform = 'translateY(calc(-50% + ' + (p * 130).toFixed(1) + 'px))';
+      docs.forEach(function(d, i){
+        d.style.transform = 'translateY(' + (p * speeds[i % speeds.length]).toFixed(1) + 'px)';
+      });
     }
     addEventListener('scroll', function(){
       if (!ticking){ ticking = true; requestAnimationFrame(update); }
